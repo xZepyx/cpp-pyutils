@@ -1,113 +1,108 @@
-#include "pyutils.cpp"
+#include "pyutils.hpp"
 
 int main() {
-    // 1. print() function - outputs text with newline
+    // 1. print() — simple print with newline
     pyutils::print("Hello, World!");
 
-    // 2. input() function - prompts user and reads input
+    // 2. input() — prompt user
     std::string name = pyutils::input("Enter your name: ");
-    pyutils::print("Hello, " + name + "!");
+    pyutils::print("Hello,", name + "!");
 
-    // 3. Variadic print function - prints multiple arguments separated by spaces
+    // 3. print() variadic — multiple arguments
     pyutils::print("This", "is", "a", "test");
 
-    // 4. str() function - converts value to string
+    // 4. str() — convert to string
     std::string num_str = pyutils::str(123);
-    pyutils::print("String representation of number: " + num_str);
+    pyutils::print("String representation:", num_str);
 
-    // 5. to_int() and to_double() functions - convert strings to numbers
+    // 5. to_int() / to_double()
     auto int_value = pyutils::to_int("42");
     auto double_value = pyutils::to_double("3.14");
-    if (int_value) pyutils::print("Converted to int: " + pyutils::str(*int_value));
-    if (double_value) pyutils::print("Converted to double: " + pyutils::str(*double_value));
 
-    // 6. len() function - returns length of container/string
-    size_t length = pyutils::len("Hello");
-    pyutils::print("Length of 'Hello': " + pyutils::str(length));
+    if (int_value)
+        pyutils::print("Converted to int:", pyutils::str(*int_value));
 
-    // 7. Range class - iterable integer range
+    if (double_value)
+        pyutils::print("Converted to double:", pyutils::str(*double_value));
+
+    // 6. len()
+    pyutils::print("Length of 'Hello':", pyutils::str(pyutils::len("Hello")));
+
+    // 7. Range
     pyutils::print("Range from 0 to 4:");
-    for (auto i : pyutils::Range(5)) {
-        pyutils::print(pyutils::str(i));
-    }
+    for (int i : pyutils::Range(5))
+        pyutils::print(i);
 
-    // 8. enumerate() function - returns vector of (index, value) pairs
+    // 8. enumerate()
     std::vector<std::string> fruits = {"apple", "banana", "cherry"};
-    auto enumerated = pyutils::enumerate(fruits);
-    pyutils::print("Enumerate example:");
-    for (auto [idx, val] : enumerated) {
-        pyutils::print("Index: " + pyutils::str(idx) + ", Value: " + val);
-    }
+    pyutils::print("Enumerate fruits:");
+    for (auto [i, v] : pyutils::enumerate(fruits))
+        pyutils::print("Index:", pyutils::str(i), "Value:", v);
 
-    // 9. zip() function - combines two containers into vector of pairs
+    // 9. zip()
     std::vector<int> nums = {1, 2, 3};
     std::vector<char> chars = {'a', 'b', 'c'};
-    auto zipped = pyutils::zip(nums, chars);
     pyutils::print("Zip example:");
-    for (auto [n, c] : zipped) {
-        pyutils::print("Num: " + pyutils::str(n) + ", Char: " + pyutils::str(c));
-    }
+    for (auto [n, c] : pyutils::zip(nums, chars))
+        pyutils::print("Num:", pyutils::str(n), "Char:", std::string(1, c));
 
-    // 10. map() function - apply function to each element
-    auto squared = pyutils::map([](int x) { return x * x; }, std::vector<int>{1, 2, 3, 4});
-    pyutils::print("Map (squared) example: ");
-    for (auto val : squared) pyutils::print(pyutils::str(val));
+    // 10. map()
+    auto squared = pyutils::map([](int x) { return x * x; }, nums);
+    pyutils::print("Map (square):");
+    for (int v : squared)
+        pyutils::print(v);
 
-    // 11. filter() function - keep elements where predicate is true
-    auto filtered = pyutils::filter([](int x) { return x > 2; }, std::vector<int>{1, 2, 3, 4});
-    pyutils::print("Filter (x > 2) example:");
-    for (auto val : filtered) pyutils::print(pyutils::str(val));
+    // 11. filter()
+    auto filtered = pyutils::filter([](int x) { return x > 1; }, nums);
+    pyutils::print("Filter (>1):");
+    for (int v : filtered)
+        pyutils::print(v);
 
-    // 12. sum() function - accumulate container elements
-    int total = pyutils::sum(std::vector<int>{1, 2, 3, 4});
-    pyutils::print("Sum of [1,2,3,4]: " + pyutils::str(total));
+    // 12. sum()
+    pyutils::print("Sum of nums:", pyutils::str(pyutils::sum(nums)));
 
-    // 13. max() and min() functions - find maximum and minimum values
-    int max_val = pyutils::max(std::vector<int>{1, 5, 3, 9, 2});
-    int min_val = pyutils::min(std::vector<int>{1, 5, 3, 9, 2});
-    pyutils::print("Max: " + pyutils::str(max_val) + ", Min: " + pyutils::str(min_val));
+    // 13. max() / min()
+    std::vector<int> values = {1, 5, 3, 9, 2};
+    pyutils::print("Max:", pyutils::str(pyutils::max(values)));
+    pyutils::print("Min:", pyutils::str(pyutils::min(values)));
 
-    // 14. join() function - combine vector of strings with separator
+    // 14. join()
     std::vector<std::string> words = {"Hello", "World"};
-    std::string joined = pyutils::join(words, " ");
-    pyutils::print("Joined: " + joined);
+    pyutils::print("Joined:", pyutils::join(words, " "));
 
-    // 15. split() function - split string by delimiter
-    auto split_result = pyutils::split("Hello World Test", ' ');
+    // 15. split()
+    auto split_res = pyutils::split("Hello World Test", ' ');
     pyutils::print("Split result:");
-    for (auto word : split_result) pyutils::print(word);
+    for (auto& w : split_res)
+        pyutils::print(w);
 
-    // 16. startswith() and endswith() functions - check string prefix/suffix
-    bool starts = pyutils::startswith("Hello World", "Hello");
-    bool ends = pyutils::endswith("Hello World", "World");
-    pyutils::print("Starts with 'Hello': " + pyutils::str(starts));
-    pyutils::print("Ends with 'World': " + pyutils::str(ends));
+    // 16. startswith / endswith
+    pyutils::print("Starts with 'Hello':",
+                   pyutils::str(pyutils::startswith("Hello World", "Hello")));
+    pyutils::print("Ends with 'World':",
+                   pyutils::str(pyutils::endswith("Hello World", "World")));
 
-    // 17. strip(), lstrip(), rstrip() functions - remove whitespace
-    std::string stripped = pyutils::strip("   Hello World   ");
-    std::string lstripped = pyutils::lstrip("   Hello   ");
-    std::string rstripped = pyutils::rstrip("   Hello   ");
-    pyutils::print("Stripped: '" + stripped + "'");
-    pyutils::print("LStripped: '" + lstripped + "'");
-    pyutils::print("RStripped: '" + rstripped + "'");
+    // 17. strip / lstrip / rstrip
+    pyutils::print("Strip:'" + pyutils::strip("   Hi   ") + "'");
+    pyutils::print("LStrip:'" + pyutils::lstrip("   Hi") + "'");
+    pyutils::print("RStrip:'" + pyutils::rstrip("Hi   ") + "'");
 
-    // 18. isdigit_all() and isalpha_all() functions - check character types
-    bool is_digit = pyutils::isdigit_all("12345");
-    bool is_alpha = pyutils::isalpha_all("abcdef");
-    pyutils::print("Is '12345' all digits? " + pyutils::str(is_digit));
-    pyutils::print("Is 'abcdef' all alphabets? " + pyutils::str(is_alpha));
+    // 18. isdigit_all / isalpha_all
+    pyutils::print("Is '12345' digit:", pyutils::str(pyutils::isdigit_all("12345")));
+    pyutils::print("Is 'abcdef' alpha:", pyutils::str(pyutils::isalpha_all("abcdef")));
 
-    // 19. reversed() function - return reversed copy of container
-    auto reversed_list = pyutils::reversed(std::vector<int>{1, 2, 3, 4});
+    // 19. reversed()
+    auto rev = pyutils::reversed(std::vector<int>{1, 2, 3});
     pyutils::print("Reversed list:");
-    for (auto val : reversed_list) pyutils::print(pyutils::str(val));
+    for (int x : rev)
+        pyutils::print(x);
 
-    // 20. read_entire_file() and write_text_file() functions - file I/O
+    // 20. read_entire_file / write_text_file
     pyutils::write_text_file("test.txt", "Hello, File!");
     auto content = pyutils::read_entire_file("test.txt");
-    if (content) {
-        pyutils::print("File content: " + *content);
-    }
+
+    if (content)
+        pyutils::print("File content:", *content);
 
     return 0;
 }

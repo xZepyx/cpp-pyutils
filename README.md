@@ -3,6 +3,39 @@
 cpp-pyutils is a lightweight C++ library that simplifies common tasks by providing Python-like functions such as `print` and `input` and a lot more. This library aims to make C++ programming more accessible and user-friendly, especially for those familiar with Python.
 
 
+## Features
+
+### I/O
+
+* print(), input()
+
+### Conversions
+
+* str(), to_int(), to_double()
+
+### Container helpers
+
+* len(), Range, enumerate(), zip(), reversed()
+
+### Functional utilities
+
+* map(), filter(), sum(), max(), min()
+
+### String utilities
+
+* join(), split(),
+* startswith(), endswith()
+* strip(), lstrip(), rstrip()
+
+### Checks
+
+* isdigit_all(), isalpha_all()
+
+### File I/O
+
+* read_entire_file(), write_text_file()
+
+
 ## Installation
 
 To use cpp-pyutils, you can clone the repository and build it using CMake:
